@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorator="navbar_header">
+<head>
+<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+<title>Controleur des usagers</title>
+
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no" />
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
+	href="http://www.datatables.net/rss.xml" />
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/select/1.3.0/css/select.bootstrap.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/select/1.3.0/js/dataTables.select.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" />
+<script type="text/javascript" class="init">
+	$(document).ready(function() {
+		$('#example').DataTable({
+			select : true
+		});
+	});
+	$(document).ready(function() {
+		$('#example1').DataTable({
+			select : true
+		});
+	});
+</script>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+
+
+		<div class="col-md-4">
+
+			<div class="panel panel-primary">
+				<div class="panel-heading">Consultation d'un compte</div>
+				<div class="panel-body">
+
+					<form th:action="@{checkID}" methode="get">
+						<div>
+							<label> ID_Usager: </label> <input type="text" name="ID"
+								th:value="${motCle}" />
+							<button type="submit" class="btn btn-primary">Ok</button>
+						</div>
+					</form>
+					<div th:if="${exception}" th:text="${exception.message}"
+						class="text-danger"></div>
+				</div>
+			</div>
+
+			<div class="panel panel-primary" th:if="${usager}">
+				<div class="panel-heading">Informations sur le compte</div>
+				<div class="panel-body">
+					<div>
+						<label> ID : </label> <label th:text="${usager.id}"></label>
+					</div>
+					<div>
+						<label> Nom : </label> <label th:text="${usager.nom}"></label>
+					</div>
+					<div>
+						<label> Prenom : </label> <label th:text="${usager.prenom}"></label>
+					</div>
+					<div>
+						<label> Adresse : </label> <label th:text="${usager.Adresse}"></label>
+					</div>
+					<div>
+						<label> Numero Telephone : </label> <label
+							th:text="${usager.telephone}"></label>
+					</div>
+					<div>
+						<label> Email : </label> <label th:text="${usager.email}"></label>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-primary" th:if="${usager}">
+				<div class="panel-heading">Historique :</div>
+				<div class="panel-body">
+					<div>
+						<a th:href="@{historiqueEmprunt(id=${usager.id})}">Consulter
+							l'historique des emprunts</a>
+					</div>
+					<div>
+						<a th:href="@{historiqueReservation(id=${usager.id})}">Consulter
+							l'historique des reservations</a>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+
+		<div class="col-md-8">
+			<div class="panel panel-primary" th:if="${usager}">
+				<div class="panel-heading">
+					Liste des emprunts : <a style="color: white; float: right"
+						th:href="@{addEmprunt(id=${usager.id})}"><i
+						class="material-icons"> add_circle </i></a>
+				</div>
+				<div class="panel-body">
+					<table id="example" class="table table-striped table-bordered"
+						style="width: 100%">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Date emprunt</th>
+								<th>Type</th>
+								<th>Oeuvre</th>
+								<th>Etat d'exemplaire</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="emprunt:${l_emprunt}">
+								<td th:text="${emprunt.id}"></td>
+								<td th:text="${emprunt.date_emprunt}"></td>
+								<td th:text="${emprunt.exemplaire.oeuvre.class.simpleName}"></td>
+								<td th:text="${emprunt.exemplaire.oeuvre.titre}"></td>
+								<td th:text="${emprunt.exemplaire.etat}"></td>
+								<td><a onclick="return confirm('Etes vous sûre ?')"
+									th:href="@{annulerEmprunt(id_emprunt=${emprunt.id},id_user=${usager.id})}">Annuler
+								</a></td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="panel panel-primary" th:if="${usager}">
+				<div class="panel-heading">
+					Liste des reservation : <a style="color: white; float: right"
+						th:href="@{addReservation(id=${usager.id})}"><i
+						class="material-icons"> add_circle </i></a>
+				</div>
+				<div class="panel-body">
+					<table id="example1" class="table table-striped table-bordered"
+						style="width: 100%">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Date de reservation</th>
+								<th>Oeuvre</th>
+								<th>Type d'oeuvre</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="reservation:${l_reservation}">
+								<td th:text="${reservation.id}"></td>
+								<td th:text="${reservation.date_reservation}"></td>
+								<td th:text="${reservation.oeuvre.titre}"></td>
+								<td th:text="${reservation.oeuvre.class.simpleName}"></td>
+								<td><a onclick="return confirm('Etes vous sûre ?')"
+									th:href="@{annulerReservation(id_reservation=${reservation.id},id_user=${usager.id})}">Annuler</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</body>
+
+</html>

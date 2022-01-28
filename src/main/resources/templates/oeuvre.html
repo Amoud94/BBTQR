@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorator="navbar_header">
+<head>
+<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+<script>
+	var showLivre = function() {
+		console.log('showLivre')
+		document.getElementById('Livre').style.display = 'block';
+		document.getElementById('Magazine').style.display = 'none';
+	}
+	var showMagazine = function() {
+		document.getElementById('Magazine').style.display = 'block';
+		document.getElementById('Livre').style.display = 'none';
+	}
+</script>
+
+<title>Controleur des oeuvres</title>
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no" />
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
+	href="http://www.datatables.net/rss.xml" />
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/select/1.3.0/css/select.bootstrap.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/select/1.3.0/js/dataTables.select.min.js"></script>
+<script type="text/javascript" class="init">
+	$(document).ready(function() {
+		$('#example').DataTable({
+			select : true
+		});
+	});
+</script>
+
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="">
+			<div class="col-md-8">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Liste des oeuvres enregistrer :</div>
+					<div class="panel-body">
+						<table id="example" class="table table-striped table-bordered"
+							style="width: 100%">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Titre</th>
+									<th>Type d'oeuvre</th>
+									<th>Nom d'auteur</th>
+									<th>Prenom d'auteur</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="oeuvre:${l_oeuvre}">
+									<td th:text="${oeuvre.id}"></td>
+									<td th:text="${oeuvre.titre}"></td>
+									<td th:text="${oeuvre.class.simpleName}"></td>
+									<td th:if="${oeuvre.class.simpleName =='Livre'}"
+										th:text="${oeuvre.auteur.nom}"></td>
+									<td th:if="${oeuvre.class.simpleName =='Livre'}"
+										th:text="${oeuvre.auteur.prenom}"></td>
+									<td th:if="${oeuvre.class.simpleName =='Magazine'}"
+										th:text="----------------"></td>
+									<td th:if="${oeuvre.class.simpleName =='Magazine'}"
+										th:text="----------------"></td>
+									<td><a th:href="@{majOeuvre(id=${oeuvre.id})}">Modifier</a></td>
+									<td><a th:href="@{listExemplaire(id=${oeuvre.id})}">List
+											des exemplaires</a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="">
+					<div class="panel panel-primary">
+						<div class="panel-heading">Ajouter un nouveau oeuvre :</div>
+						<div class="panel-body">
+							<div>
+								<div>
+									<div class="col-md-4">
+										<input type="radio" name="typeOeuvre" onclick="showMagazine()" />
+										<label>Magazine</label>
+									</div>
+									<div class="col-md-4">
+										<input type="radio" name="typeOeuvre" onclick="showLivre()" />
+										<label>Livre</label>
+									</div>
+								</div>
+								<br /> <br />
+								<div id="Magazine" style="display: none">
+									<form th:action="@{addMagazine}" method="post">
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control" placeholder="Titre"
+												name="titre" th:value="${oeuvre.titre}" />
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<button type="submit"
+													onclick="return confirm('Etes vous sûre ?')"
+													class="btn btn-primary btn-block btn-flat">Enregistrer</button>
+											</div>
+										</div>
+									</form>
+
+								</div>
+
+								<div id="Livre" style="display: none">
+									<form th:action="@{addLivre}" method="post">
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control" placeholder="Titre"
+												name="titre" th:value="${oeuvre.titre}" />
+										</div>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control"
+												placeholder="Nom d'auteur" name="nom"
+												th:value="${auteur.nom}" />
+										</div>
+										<div class="form-group has-feedback">
+											<input type="text" class="form-control"
+												placeholder="Prenom d'auteur" name="prenom"
+												th:value="${auteur.nom}" />
+										</div>
+
+										<div class="row">
+											<div class="col-xs-12">
+												<button type="submit"
+													onclick="return confirm ('Etes vous sûre ?')"
+													class="btn btn-primary btn-block btn-flat">Enregistrer</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorator="navbar_header">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" />
+<title>Controleur des usagers</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="col">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Ajouter un nouveau usager :</div>
+					<div class="panel-body">
+						<div>
+							<a th:href="@{userControler}"> <i class="material-icons">
+									keyboard_backspace </i>
+							</a>
+						</div>
+						<br />
+						<form th:action="@{adduser}" method="post">
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control" placeholder="CIN"
+									name="Id" th:value="${user.id}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control" placeholder="Nom"
+									name="nom" th:value="${user.nom}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control" placeholder="Prenom"
+									name="prenom" th:value="${user.prenom}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control" placeholder="Adresse"
+									name="adresse" th:value="${user.adresse}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control"
+									placeholder="Numero de telephone" name="telephone"
+									th:value="${user.telephone}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control"
+									placeholder="Adresse Email" name="email"
+									th:value="${user.email}" />
+							</div>
+							<div class="form-group has-feedback">
+								<button type="submit"
+									onclick="return confirm('Etes vous sûre ?')"
+									class="btn btn-primary btn-block btn-flat">Ajouter</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="./bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

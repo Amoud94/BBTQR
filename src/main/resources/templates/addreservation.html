@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorator="navbar_header">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+<title>Controleur des usagers</title>
+
+
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,user-scalable=no" />
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0"
+	href="http://www.datatables.net/rss.xml" />
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/select/1.3.0/css/select.bootstrap.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.datatables.net/select/1.3.0/js/dataTables.select.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" />
+<script type="text/javascript" class="init">
+	$(document).ready(function() {
+		$('#example').DataTable({
+			select : true
+		});
+	});
+</script>
+
+</head>
+<body>
+	<div layout:fragment="content" class="row">
+		<div class="container">
+
+			<div class="col-md-12">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Liste des oeuvre a reserver:</div>
+					<div class="panel-body">
+						<div>
+							<a th:href="@{checkID(ID=${user.id})}"> <i
+								class="material-icons"> keyboard_backspace </i>
+							</a>
+						</div>
+						<br />
+						<table id="example" class="table table-striped table-bordered"
+							style="width: 100%">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>Titre</th>
+									<th>Type d'oeuvre</th>
+									<th>Auteur</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="oeuvre:${l_oeuvre}">
+									<td th:text="${oeuvre.id}"></td>
+									<td th:text="${oeuvre.titre}"></td>
+									<td th:text="${oeuvre.class.simpleName}"></td>
+									<td th:if="${oeuvre.class.simpleName == 'Magazine'}">NO
+										DATA FOUND</td>
+									<td th:if="${oeuvre.class.simpleName =='Livre'}"
+										th:text="${oeuvre.auteur.nom}"></td>
+									<td><a onclick="return confirm('Etes vous sûre ?')"
+										th:href="@{reserver(id_oeuvre=${oeuvre.id},id_user=${user.id})}">Reserver</a></td>
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="./bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

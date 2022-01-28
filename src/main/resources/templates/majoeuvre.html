@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	layout:decorator="navbar_header">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" />	
+<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css" />
+<title>Controleur des oeuvres</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="col">
+				<div class="panel panel-primary">
+					<div class="panel-heading">MAJ Oeuvre :</div>
+					<div class="panel-body">
+						<div>
+							<a th:href="@{oeuvrePanel}"> <i
+								class="material-icons"> keyboard_backspace </i>
+							</a>
+						</div>
+						<br/>
+						<form th:action="@{save}" method="post">
+							<div class="form-group has-feedback">
+								<input type="text" readonly="readonly" class="form-control"
+									placeholder="ID oeuvre" name="id" th:value="${oeuvre.id}" />
+							</div>
+							<div class="form-group has-feedback">
+								<input type="text" class="form-control" placeholder="Titre"
+									name="titre" th:value="${oeuvre.titre}" />
+							</div>
+							<div th:if="${oeuvre.class.simpleName =='Livre'}">
+								<div class="form-group has-feedback">
+									<input type="text" class="form-control" placeholder="Nom d'auteur"
+										name="auteur.nom" th:value="${oeuvre.auteur.nom}" />
+								</div>
+								<div class="form-group has-feedback">
+									<input type="text" class="form-control" placeholder="Prenom d'auteur"
+										name="auteur.prenom" th:value="${oeuvre.auteur.prenom}" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<button type="submit"
+										class="btn btn-primary btn-block btn-flat">Enregistrer</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="./bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
